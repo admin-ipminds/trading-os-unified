@@ -1,0 +1,24 @@
+{
+  "name": "trading-os-unified",
+  "version": "0.1.0",
+  "description": "Unified multi-broker paper + live trading platform for Indian retail traders",
+  "private": true,
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "start": "pnpm -r start",
+    "check": "tsc --noEmit",
+    "lint": "prettier --check .",
+    "format": "prettier --write .",
+    "db:push": "cd packages/backend && pnpm db:push",
+    "db:generate": "cd packages/backend && pnpm db:generate"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "prettier": "^3.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

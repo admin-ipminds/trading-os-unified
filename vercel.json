@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm build",
+  "outputDirectory": "packages/frontend/out",
+  "installCommand": "pnpm install",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@api_url"
+  },
+  "envs": {
+    "production": {
+      "NEXT_PUBLIC_API_URL": "https://api.trading-os.ipminds.net"
+    },
+    "preview": {
+      "NEXT_PUBLIC_API_URL": "https://api-preview.trading-os.ipminds.net"
+    }
+  },
+  "functions": {
+    "packages/frontend/pages/**": {
+      "maxDuration": 10
+    }
+  },
+  "routes": [
+    {
+      "source": "/api/(.*)",
+      "destination": "http://localhost:3001/trpc/$1"
+    }
+  ]
+}

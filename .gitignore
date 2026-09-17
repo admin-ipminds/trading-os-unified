@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+.turbo/
+pnpm-lock.yaml
+.next/
+out/
+coverage/
