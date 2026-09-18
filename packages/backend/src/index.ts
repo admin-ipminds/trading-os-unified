@@ -1,9 +1,9 @@
-import express from 'express';
-import { createExpressMiddleware } from '@trpc/express';
+import express, { type Express } from 'express';
+import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import authRoutes from './authRoutes';
 import { appRouter } from './trpc';
 
-const app = express();
+const app: Express = express();
 
 // Middleware
 app.use(express.json());

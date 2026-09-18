@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from 'express';
 import axios from 'axios';
 import { OAuthManager, InMemoryTokenStore } from './oauth';
 
-const router = Router();
+const router: Router = Router();
 const oauthManager = new OAuthManager();
 const tokenStore = new InMemoryTokenStore();
 
