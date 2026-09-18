@@ -32,7 +32,7 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
   }
 };
 
-export const generateJWT = (userId: string, expiresIn: string = '24h'): string => {
+export const generateJWT = (userId: string, expiresIn: jwt.SignOptions['expiresIn'] = '24h'): string => {
   return jwt.sign({ userId }, process.env.JWT_SECRET || 'secret', { expiresIn });
 };
 
