@@ -144,9 +144,6 @@ importers:
 
   packages/portfolio-mgmt:
     dependencies:
-      '@trading-os/broker-adapter':
-        specifier: workspace:*
-        version: link:../broker-adapter
       '@trading-os/types':
         specifier: workspace:*
         version: link:../types
