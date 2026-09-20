@@ -7,10 +7,10 @@ export interface BrokerConfig {
   baseUrl?: string;
 }
 
-export abstract class BrokerAdapter {
-  protected config: BrokerConfig;
+export abstract class BrokerAdapter<TConfig extends BrokerConfig = BrokerConfig> {
+  protected config: TConfig;
 
-  constructor(config: BrokerConfig) {
+  constructor(config: TConfig) {
     this.config = config;
   }
 
@@ -22,20 +22,22 @@ export abstract class BrokerAdapter {
 }
 
 // Import implementations
-import { ZerodhaBrokerAdapter } from './adapters/zerodha.adapter';
-import { DhanBrokerAdapter } from './adapters/dhan.adapter';
-import { IciciDirectAdapter } from './adapters/icici.adapter';
+import { ZerodhaBrokerAdapter, ZerodhaConfig } from './adapters/zerodha.adapter';
+import { DhanBrokerAdapter, DhanConfig } from './adapters/dhan.adapter';
+import { IciciDirectAdapter, IciciConfig } from './adapters/icici.adapter';
+
+export type AnyBrokerConfig = ZerodhaConfig | DhanConfig | IciciConfig;
 
 export class BrokerAdapterFactory {
-  static create(type: string, config: BrokerConfig): BrokerAdapter {
+  static create(type: string, config: AnyBrokerConfig): BrokerAdapter {
     switch (type.toLowerCase()) {
       case 'zerodha':
-        return new ZerodhaBrokerAdapter(config);
+        return new ZerodhaBrokerAdapter(config as ZerodhaConfig);
       case 'dhan':
-        return new DhanBrokerAdapter(config);
+        return new DhanBrokerAdapter(config as DhanConfig);
       case 'icici':
       case 'icici-direct':
-        return new IciciDirectAdapter(config);
+        return new IciciDirectAdapter(config as IciciConfig);
       default:
         throw new Error(`Unknown broker type: ${type}`);
     }
@@ -43,3 +45,4 @@ export class BrokerAdapterFactory {
 }
 
 export { ZerodhaBrokerAdapter, DhanBrokerAdapter, IciciDirectAdapter };
+export type { ZerodhaConfig, DhanConfig, IciciConfig };

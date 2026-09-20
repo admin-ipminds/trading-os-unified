@@ -4,13 +4,15 @@ import axios from 'axios';
 import WebSocket from 'ws';
 
 export interface DhanConfig extends BrokerConfig {
-  clientId: string;
+  // TODO: not populated post-login (trpc.ts only has accessToken+apiKey at
+  // call time) - clientId is required by Dhan's real OAuth flow but broker
+  // account metadata isn't persisted anywhere retrievable yet.
+  clientId?: string;
   apiKey: string;
   accessToken?: string;
 }
 
-export class DhanBrokerAdapter extends BrokerAdapter {
-  private config: DhanConfig;
+export class DhanBrokerAdapter extends BrokerAdapter<DhanConfig> {
   private baseUrl = 'https://api.dhan.co';
   private wsUrl = 'wss://api.dhan.co/stream';
   private client = axios.create();
@@ -18,7 +20,6 @@ export class DhanBrokerAdapter extends BrokerAdapter {
 
   constructor(config: DhanConfig) {
     super(config);
-    this.config = config;
   }
 
   async authenticate(): Promise<boolean> {

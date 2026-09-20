@@ -5,18 +5,19 @@ import axios from 'axios';
 export interface ZerodhaConfig extends BrokerConfig {
   apiKey: string;
   apiSecret?: string;
-  clientId: string;
+  // TODO: not populated post-login (trpc.ts only has accessToken+apiKey at
+  // call time) - clientId is required by Zerodha's real OAuth flow but
+  // broker account metadata isn't persisted anywhere retrievable yet.
+  clientId?: string;
   accessToken?: string;
 }
 
-export class ZerodhaBrokerAdapter extends BrokerAdapter {
-  private config: ZerodhaConfig;
+export class ZerodhaBrokerAdapter extends BrokerAdapter<ZerodhaConfig> {
   private baseUrl = 'https://api.kite.trade';
   private client = axios.create();
 
   constructor(config: ZerodhaConfig) {
     super(config);
-    this.config = config;
   }
 
   async authenticate(): Promise<boolean> {

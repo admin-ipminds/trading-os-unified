@@ -46,7 +46,7 @@ export const appRouter = t.router({
         // Get broker adapter
         const broker = BrokerAdapterFactory.create(input.brokerType, {
           accessToken: token,
-          apiKey: process.env[`${input.brokerType.toUpperCase()}_API_KEY`],
+          apiKey: process.env[`${input.brokerType.toUpperCase()}_API_KEY`] ?? '',
         });
 
         // Authenticate with broker
@@ -70,7 +70,7 @@ export const appRouter = t.router({
         return {
           success: true,
           orderId,
-          message: `Order placed: ${input.side} ${input.qty} ${input.symbol} @ ₹${input.price}`,
+          message: `Order placed: ${input.side} ${input.qty} ${input.symbol} @ Rs.${input.price}`,
         };
       }),
 
@@ -94,6 +94,7 @@ export const appRouter = t.router({
 
         const broker = BrokerAdapterFactory.create(input.brokerType, {
           accessToken: token,
+          apiKey: process.env[`${input.brokerType.toUpperCase()}_API_KEY`] ?? '',
         });
 
         const cancelled = await broker.cancelOrder(input.orderId);
@@ -132,6 +133,7 @@ export const appRouter = t.router({
 
         const broker = BrokerAdapterFactory.create(input.brokerType, {
           accessToken: token,
+          apiKey: process.env[`${input.brokerType.toUpperCase()}_API_KEY`] ?? '',
         });
 
         const isAuthenticated = await broker.authenticate();
@@ -144,8 +146,8 @@ export const appRouter = t.router({
         return {
           positions,
           brokerType: input.brokerType,
-          totalQty: positions.reduce((sum, p) => sum + p.qty, 0),
-          totalPnL: positions.reduce((sum, p) => sum + p.pnl, 0),
+          totalQty: positions.reduce((sum: number, p: (typeof positions)[number]) => sum + p.qty, 0),
+          totalPnL: positions.reduce((sum: number, p: (typeof positions)[number]) => sum + p.pnl, 0),
         };
       }),
 

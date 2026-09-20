@@ -3,20 +3,22 @@ import { Order, Position, Quote } from '@trading-os/types';
 import axios from 'axios';
 
 export interface IciciConfig extends BrokerConfig {
-  customerId: string;
+  // TODO: not populated post-login (trpc.ts only has accessToken+apiKey at
+  // call time) - customerId/password are required for ICICI's real
+  // form-login flow but broker account metadata isn't persisted anywhere
+  // retrievable yet, so post-login calls can't re-authenticate from scratch.
+  customerId?: string;
   apiKey: string;
-  password: string;
+  password?: string;
   accessToken?: string;
 }
 
-export class IciciDirectAdapter extends BrokerAdapter {
-  private config: IciciConfig;
+export class IciciDirectAdapter extends BrokerAdapter<IciciConfig> {
   private baseUrl = 'https://api.icicidirect.com';
   private client = axios.create();
 
   constructor(config: IciciConfig) {
     super(config);
-    this.config = config;
   }
 
   async authenticate(): Promise<boolean> {
