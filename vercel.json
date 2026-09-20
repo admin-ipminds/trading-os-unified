@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "pnpm install && pnpm --filter \"@trading-os/frontend^...\" build && pnpm --filter @trading-os/frontend build",
-  "installCommand": "pnpm install",
   "framework": "nextjs",
   "env": {
     "NEXT_PUBLIC_API_URL": "https://trading-osbackend-production.up.railway.app"
