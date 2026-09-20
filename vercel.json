@@ -1,28 +1,9 @@
 {
   "version": 2,
-  "buildCommand": "pnpm build",
-  "outputDirectory": "packages/frontend/out",
+  "buildCommand": "pnpm install && pnpm --filter \"@trading-os/frontend^...\" build && pnpm --filter @trading-os/frontend build",
   "installCommand": "pnpm install",
+  "framework": "nextjs",
   "env": {
-    "NEXT_PUBLIC_API_URL": "@api_url"
-  },
-  "envs": {
-    "production": {
-      "NEXT_PUBLIC_API_URL": "https://api.trading-os.ipminds.net"
-    },
-    "preview": {
-      "NEXT_PUBLIC_API_URL": "https://api-preview.trading-os.ipminds.net"
-    }
-  },
-  "functions": {
-    "packages/frontend/pages/**": {
-      "maxDuration": 10
-    }
-  },
-  "routes": [
-    {
-      "source": "/api/(.*)",
-      "destination": "http://localhost:3001/trpc/$1"
-    }
-  ]
+    "NEXT_PUBLIC_API_URL": "https://trading-osbackend-production.up.railway.app"
+  }
 }
