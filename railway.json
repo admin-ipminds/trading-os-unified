@@ -1,10 +1,10 @@
 {
   "build": {
     "builder": "nixpacks",
-    "buildCommand": "pnpm install && pnpm build"
+    "buildCommand": "pnpm install && pnpm --filter \"@trading-os/backend^...\" build && pnpm --filter @trading-os/backend build"
   },
   "deploy": {
-    "startCommand": "pnpm start",
+    "startCommand": "pnpm --filter @trading-os/backend start",
     "restartPolicyType": "on_failure",
     "healthcheckPath": "/health",
     "healthcheckTimeout": 100
