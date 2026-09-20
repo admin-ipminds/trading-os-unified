@@ -6,3 +6,5 @@
 // see https://nextjs.org/docs/pages/api-reference/config/typescript for more information.
 
 // redeploy trigger
+
+// redeploy trigger 2
