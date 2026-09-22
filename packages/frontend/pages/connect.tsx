@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { API_URL } from '../src/lib/trpc';
 
 export default function ConnectBrokers() {
   const [selectedBroker, setSelectedBroker] = useState<string | null>(null);
@@ -11,18 +12,20 @@ export default function ConnectBrokers() {
     setLoading(true);
     try {
       if (broker === 'icici') {
-        // ICICI: Direct login with credentials
-        const res = await fetch('/api/auth/icici/login', {
+        const res = await fetch(`${API_URL}/auth/icici/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(iciciCreds),
         });
         if (res.ok) {
-          window.location.href = (await res.json()).redirectUrl;
+          const data = await res.json();
+          window.location.href = data.redirectUrl;
+        } else {
+          const err = await res.json().catch(() => ({}));
+          alert(err.error || 'ICICI login failed');
         }
       } else {
-        // Zerodha / Dhan: OAuth redirect
-        const res = await fetch(`/api/auth/${broker}/login`);
+        const res = await fetch(`${API_URL}/auth/${broker}/login`);
         const { redirectUrl } = await res.json();
         window.location.href = redirectUrl;
       }
@@ -41,7 +44,6 @@ export default function ConnectBrokers() {
         <p className="text-gray-600 mb-8">Link your broker account to start trading on Trading OS</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Zerodha Card */}
           <div className="border rounded-lg p-6 hover:shadow-lg transition">
             <h2 className="text-xl font-bold mb-2">Zerodha</h2>
             <p className="text-gray-600 text-sm mb-4">Fast, secure OAuth login</p>
@@ -54,7 +56,6 @@ export default function ConnectBrokers() {
             </button>
           </div>
 
-          {/* Dhan Card */}
           <div className="border rounded-lg p-6 hover:shadow-lg transition">
             <h2 className="text-xl font-bold mb-2">DhanHQ</h2>
             <p className="text-gray-600 text-sm mb-4">Lightweight, direct access</p>
@@ -67,7 +68,6 @@ export default function ConnectBrokers() {
             </button>
           </div>
 
-          {/* ICICI Direct Card */}
           <div className="border rounded-lg p-6 hover:shadow-lg transition">
             <h2 className="text-xl font-bold mb-2">ICICI Direct</h2>
             <p className="text-gray-600 text-sm mb-4">Established, reliable</p>
@@ -80,7 +80,6 @@ export default function ConnectBrokers() {
           </div>
         </div>
 
-        {/* ICICI Login Form */}
         {selectedBroker === 'icici' && (
           <div className="mt-8 p-6 bg-gray-50 rounded-lg">
             <h3 className="text-lg font-bold mb-4">ICICI Direct Login</h3>

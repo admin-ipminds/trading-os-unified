@@ -9,11 +9,31 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CORS for frontend
+// CORS for frontend(s) - allow the deployed Vercel frontend, Railway frontend, and local dev
+const ALLOWED_ORIGINS = (
+  process.env.ALLOWED_ORIGINS ||
+  [
+    'https://trading-os-unified.vercel.app',
+    'https://trading-osfrontend-production.up.railway.app',
+    'http://localhost:3000',
+  ].join(',')
+)
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  } else if (!origin) {
+    // no origin header (server-to-server, curl, health checks) - no CORS header needed
+  } else {
+    res.header('Access-Control-Allow-Origin', ALLOWED_ORIGINS[0]);
+  }
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Vary', 'Origin');
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
@@ -49,12 +69,10 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`🚀 Backend running on port ${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  console.log(`🔗 tRPC endpoint: http://localhost:${PORT}/trpc`);
-  console.log(`🔐 Auth routes: http://localhost:${PORT}/auth`);
+  console.log(`Backend running on port ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/health`);
+  console.log(`tRPC endpoint: http://localhost:${PORT}/trpc`);
+  console.log(`Auth routes: http://localhost:${PORT}/auth`);
 });
 
 export default app;
-
-// redeploy trigger
