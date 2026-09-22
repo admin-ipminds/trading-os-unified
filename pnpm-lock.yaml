@@ -119,9 +119,6 @@ importers:
         specifier: ^4.0.0
         version: 4.3.3
     devDependencies:
-      '@trading-os/backend':
-        specifier: workspace:*
-        version: link:../backend
       '@types/node':
         specifier: ^20.0.0
         version: 20.19.43
